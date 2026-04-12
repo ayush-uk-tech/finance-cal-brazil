@@ -41,7 +41,6 @@ class SalaryInputBrazil(BaseModel):
     gross_salary: float
     food_stipend: float
     exchange_rate: float
-    custom_markup_gbp: float  # User-provided markup value in GBP
 
 def get_markup(total_per_annum_gbp):
     if total_per_annum_gbp < MARKUP_KEYS[0]:
@@ -82,7 +81,7 @@ def calculate_brazil_finance(data: SalaryInputBrazil):
 
     # 2. Conversion & Markup (GBP Calculations)
     total_per_annum_gbp = total_per_annum_brl / data.exchange_rate
-    mark_up_gbp = data.custom_markup_gbp  # Use user-provided markup instead of lookup table
+    mark_up_gbp = get_markup(total_per_annum_gbp)
     
     fully_loaded_resource_cost = total_per_annum_gbp + mark_up_gbp
     recruitment_fee = fully_loaded_resource_cost * 0.10
